@@ -36,7 +36,7 @@ module Danger
       fail_on_inline_comment = config[:fail_on_inline_comment] || false
 
       files_to_lint = fetch_files_to_lint(files)
-      files_to_report = rubocop(files_to_lint, force_exclusion)
+      files_to_report = rubocop(files_to_lint, force_exclusion, rubocop_rules_dir)
 
       return if files_to_report.empty?
       return report_failures files_to_report if report_danger
@@ -51,11 +51,11 @@ module Danger
 
     private
 
-    def rubocop(files_to_lint, force_exclusion)
+    def rubocop(files_to_lint, force_exclusion, path_to_rubocop)
       base_command = 'rubocop -f json'
       base_command << ' --force-exclusion' if force_exclusion
-      base_command << ' -c .rubocop.yml'
-      puts "DIR ===> #{Rails.root}"
+      base_command << " -c #{path_to_rubocop}"
+      # puts "DIR ===> #{Rails.root}"
       rubocop_output = `#{'bundle exec ' if File.exist?('Gemfile')}#{base_command} #{files_to_lint}`
 
       return [] if rubocop_output.empty?
