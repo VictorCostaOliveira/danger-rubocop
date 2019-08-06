@@ -56,7 +56,7 @@ module Danger
       base_command << ' --force-exclusion' if force_exclusion
       puts "============ #{File.exist?(path_to_rubocop)}"
       base_command << " -c #{path_to_rubocop}"
-      # puts "DIR ===> #{Rails.root}"
+      puts "============ #{base_command}"
       rubocop_output = `#{'bundle exec ' if File.exist?('Gemfile')}#{base_command} #{files_to_lint}`
 
       return [] if rubocop_output.empty?
